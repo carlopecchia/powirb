@@ -10,6 +10,6 @@ EOF
   s.email             = ["info@carlopecchia.eu"]
   s.homepage          = "http://github.com/carlopecchia/powirb"
   s.add_dependency('nokogiri')
-  s.files = ["LICENSE", "README.markdown", "Rakefile", "lib/powirb.rb", "lib/powirb/version.rb", "lib/powirb/workitem.rb", "lib/powirb/handler.rb", "powirb.gemspec", "test/test_helper.rb", "test/test_powirb_workitem.rb", "test/test_powirb.rb", "test/test_powirb_handler.rb"]
+  s.files = ["LICENSE", "README.markdown", "Rakefile", "lib/powirb/handler.rb", "lib/powirb/version.rb", "lib/powirb/workitem.rb", "lib/powirb.rb", "powirb.gemspec", "test/test_helper.rb", "test/test_powirb.rb", "test/test_powirb_handler.rb", "test/test_powirb_workitem.rb"]
 end
 
