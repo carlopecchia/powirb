@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project>
-    <field id="name">Sample Project</field>
-    <field id="trackerPrefix">WI</field>
-    <field id="lead">cpecchia</field>
-    <field id="active">true</field>
-</project>
