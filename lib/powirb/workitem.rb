@@ -22,7 +22,7 @@ class Workitem
   def read
     Powirb.log.debug("Retrieving workitem from #{@filename}")
     begin
-	  @doc = Nokogiri::XML(open @filename)
+	  @doc = Nokogiri::XML(open(@filename))
 	rescue Exception => e
 	  Powirb.log.error(e)
 	end

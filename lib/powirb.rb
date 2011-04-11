@@ -1,5 +1,5 @@
 
-$:.unshift(File.dirname __FILE__)
+$:.unshift(File.dirname(__FILE__))
 
 Dir.glob(File.join('..','vendor','gems','*','lib')).each do |lib|
   $:.unshift(File.expand_path(lib))
