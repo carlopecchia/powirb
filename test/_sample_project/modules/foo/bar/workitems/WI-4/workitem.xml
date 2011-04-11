@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<work-item>
+    <field id="type">action</field>
+    <field id="author">cpecchia</field>
+    <field id="title">Sample title here</field>
+    <field id="created">2011-04-11 12:30:00.000 +0100</field>
+    <field id="description" text-type="text/html"><![CDATA[<div>
+            <p>blah blah blah...</p>
+        </div>]]></field>
+    <field id="priority">20.0</field>
+    <field id="status">open</field>
+    <field id="severity">normal</field>
+    <field id="previousStatus">created</field>
+</work-item>
