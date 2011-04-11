@@ -14,12 +14,13 @@ require 'logger'
 # Author:: Carlo Pecchia (mailto:info@carlopecchia.eu)
 # Copyright:: Copyright (c) 2011 Carlo Pecchia
 # License:: See LICENSE file
-
 module Powirb
 
   # Set the logger used for all classes under Powirb module.
-  # * level: debug, info, warn (default), error, fatal
-  # * filename: if not specified STDOUT is used
+  #
+  # +level+ debug, info, warn (default), error, fatal
+  #
+  # +filename+ if not specified STDOUT is used
   def self.set_logger(level, filename=STDOUT)
     @logger = Logger.new(filename)
 	@logger.datetime_format = "%Y-%m-%d %H:%M:%S"
@@ -44,7 +45,8 @@ module Powirb
   
   # Provide access to internal Logger instance.
   # Usual classes are used: fatal, error, warn, info, debug
-  # eg: Powirb.log.warn("message here...")
+  #
+  # eg: <tt>Powirb.log.warn("message here...")</tt>
   def self.log
     @logger
   end

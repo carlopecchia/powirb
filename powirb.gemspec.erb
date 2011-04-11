@@ -1,0 +1,22 @@
+
+Gem::Specification.new do |s|
+  s.name              = "powirb"
+  s.version           = "1.0"
+  s.summary           = "POlarion WorkItems handling with RuBy"
+  s.description		  = <<-EOF
+  Ruby interface to Polarion workitems content, for fast manipulation.
+EOF
+  s.authors           = ["Carlo Pecchia"]
+  s.email             = ["info@carlopecchia.eu"]
+  s.homepage          = "http://github.com/carlopecchia/powirb"
+  s.add_dependency('nokogiri')
+  s.files = <%= Dir[
+    "LICENSE",
+    "README.markdown",
+    "Rakefile",
+    "lib/**/*.rb",
+    "*.gemspec",
+    "test/*.*",
+  ].inspect %>
+end
+
