@@ -23,21 +23,21 @@ module Powirb
   # +filename+ if not specified STDOUT is used
   def self.set_logger(level, filename=STDOUT)
     @logger = Logger.new(filename)
-	@logger.datetime_format = "%Y-%m-%d %H:%M:%S"
-	@logger.level = case level.to_s
-	  when 'debug'
-		Logger::DEBUG
-	  when 'info'
-		Logger::INFO
-	  when 'warn'
-		Logger::WARN
-	  when 'error'
-		Logger::ERROR
-	  when 'fatal'
-		Logger::FATAL
-	  else
-	    Logger::WARN
-	end	
+    @logger.datetime_format = "%Y-%m-%d %H:%M:%S"
+    @logger.level = case level.to_s
+	    when 'debug'
+		    Logger::DEBUG
+	    when 'info'
+		    Logger::INFO
+	    when 'warn'
+		    Logger::WARN
+	    when 'error'
+		   Logger::ERROR
+	    when 'fatal'
+		    Logger::FATAL
+	    else
+	      Logger::WARN
+	  end	
   end
   
   # we have to provide a default logger
