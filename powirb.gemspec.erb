@@ -1,7 +1,11 @@
+<%
+  $LOAD_PATH.unshift File.expand_path("../lib", __FILE__)
+  require 'powirb/version'
+%>
 
 Gem::Specification.new do |s|
   s.name              = "powirb"
-  s.version           = "1.0"
+  s.version           = "<%= Powirb::VERSION %>"
   s.summary           = "POlarion WorkItems handling with RuBy"
   s.description		  = <<-EOF
   Ruby interface to Polarion workitems content, for fast manipulation.

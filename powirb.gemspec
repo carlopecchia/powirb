@@ -1,7 +1,8 @@
 
+
 Gem::Specification.new do |s|
   s.name              = "powirb"
-  s.version           = "1.0"
+  s.version           = "1.1"
   s.summary           = "POlarion WorkItems handling with RuBy"
   s.description		  = <<-EOF
   Ruby interface to Polarion workitems content, for fast manipulation.

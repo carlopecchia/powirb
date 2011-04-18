@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/test_helper'
+require 'Nokogiri'
 
 class PowirbWorkitemTest < Test::Unit::TestCase
 
@@ -70,5 +71,17 @@ class PowirbWorkitemTest < Test::Unit::TestCase
 	w.read
     assert_nil w['priority']
   end
-
+  
+  def test_xml
+    xml = @wi.to_xml
+    assert_kind_of String, xml
+    assert xml.include?("<field id=\"title\">#{@wi[:title]}</field>")
+  end
+  
+  def test_fields
+    fields = @wi.fields
+    assert_kind_of Array, fields
+    assert fields.include?('title')
+    assert !fields.include?('foo')
+  end
 end

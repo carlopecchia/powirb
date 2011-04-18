@@ -29,5 +29,5 @@ end
  
 desc "Release gem to RubyGems.org"
 task :release => :build do
-  #system "gem push powirb-#{Powirb::VERSION}"
+  system "gem push powirb-#{Powirb::VERSION}.gem"
 end

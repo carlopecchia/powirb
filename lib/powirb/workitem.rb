@@ -67,6 +67,16 @@ class Workitem
   def wid
     File.basename(File.dirname(@filename))
   end
+  
+  # Return XML content
+  def to_xml
+    @doc.to_xml
+  end
+  
+  # Return a list with all field names
+  def fields
+    @doc.xpath("//field").map{|node| node['id']}.sort
+  end  
 end
 
 end
