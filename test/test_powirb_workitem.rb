@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/test_helper'
-require 'Nokogiri'
+#require 'Nokogiri'
 
 class PowirbWorkitemTest < Test::Unit::TestCase
 
@@ -9,11 +9,10 @@ class PowirbWorkitemTest < Test::Unit::TestCase
     FileUtils.rm_rf dst
     FileUtils.cp_r  src, dst
     
-    pp = File.join(File.dirname(__FILE__),'sample_project')
+    @pp = File.join(File.dirname(__FILE__),'sample_project')
 	Powirb.set_logger(:debug,'/dev/null')
-    @h = Powirb::Handler.new(pp)
-	@wi = @h.workitems.first
-	@wi.read
+    @h = Powirb::Handler.new(@pp)
+	@wi = @h.workitems[@h.workitems.keys.first]
   end
   
   def teardown
@@ -67,8 +66,8 @@ class PowirbWorkitemTest < Test::Unit::TestCase
 	assert_nil @wi['priority']
 	@wi.save!
 	
-	w = @h.workitems.first
-	w.read
+	h2 = Powirb::Handler.new(@pp)
+	w = h2.workitems[@wi.wid]
     assert_nil w['priority']
   end
   
@@ -83,5 +82,18 @@ class PowirbWorkitemTest < Test::Unit::TestCase
     assert_kind_of Array, fields
     assert fields.include?('title')
     assert !fields.include?('foo')
+  end
+  
+  def test_space
+    assert_not_nil @wi.space
+	assert_kind_of String, @wi.space
+	assert_equal 'tracker', @wi.space
+  end
+  
+  def test_links
+	wi = @h.workitems['WI-2']
+	assert_not_nil wi.links
+	assert_equal 1, wi.links.size
+	assert_equal 'parent:WI-1', wi.links.first
   end
 end

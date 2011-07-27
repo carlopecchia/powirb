@@ -8,7 +8,7 @@
   
 # Intro
 
-Often when using Polarion ALM and you refine (and redefine) step-by-step you process, or perhaps you need a fine-tune over the way you defines wor items the workflows and so and so. Other time you need to import data from other tools and - again - you need an adjustment on some workitems (eg: author name, status, etc).
+Often when using Polarion ALM you refine (and redefine) step-by-step your process, or perhaps you need a fine-tune over the way you defines work items, workflows and so and so. Other time you need to import data from other tools and - again - you need an adjustment on some workitems (eg: author name, status, external references, etc).
 
 I've fonud extremely valuable and fast to do all this operation in [CLI](http://en.wikipedia.org/wiki/Command-line_interface) with ruby.
 
@@ -29,21 +29,26 @@ Only basic operation on workitems are implemented, see the example above:
 
 	# this referes to a project working copy of the subversion repository
 	h = Powirb::Handler.new('./SampleProject')
+	# now the handler has loaded all workitems data in memory (very fast)
 
-	h.workitems.each do |wi|
-	  if  wi['status'] == 'closed' and wi[:type] == 'action'
-	    wi[:resolution] = 'done'
-	    wi.save!
-	  end
+	# we can access a particular workitem with its "wid"
+	wi = h.workitems['WI-1234']
+	
+	# or by and AND'ed set of conditions, eg: all closed requirements
+	h.workitems(:type => 'requirements', :status => 'closed').each do |wid,wi|
+	  puts "#{wid} - #{wi[:title]}"
+      wi[:resolution] = 'done'
+	  wi.save!
 	end
 
-Please, *remember*: In order to "save" the modification we have to hit a commit with subversion.
+Please, *remember*: In order to "save" the modification we have to hit a subsequent *commit* with subversion.
 
 
 # Notes
 
-* it does work with Polarion 2011
-* it does **not** support the "old" *LiveDoc* technology
+* Powirb can't create new workitems, only updating on existing ones is allowed
+* it does **not** support the "old" *LiveDoc* technology, but it's ok with the new one
+* the only fields you can change are "string/text" (more work have to be done here!)
 * the actual version was tested under Linux and Mac OS X only
 
 
@@ -51,7 +56,4 @@ Please, *remember*: In order to "save" the modification we have to hit a commit 
 
 **Powirb** is written by [Carlo Pecchia](mailto:info@carlopecchia.eu) and released under the terms of Apache License (see LICENSE file).
 
-
 ----
-
-

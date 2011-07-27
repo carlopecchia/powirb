@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'test/unit'
-#require 'ftools'
 require 'fileutils'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__),'..','lib'))

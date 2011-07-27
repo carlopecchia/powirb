@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <work-item>
+    <field id="linkedWorkItems">
+        <list>
+            <struct>
+                <item id="revision"/>
+                <item id="workItem">WI-1</item>
+                <item id="role">parent</item>
+            </struct>
+        </list>
+    </field>
     <field id="type">task</field>
     <field id="author">cpecchia</field>
     <field id="title">Another sample title here</field>

@@ -19,10 +19,21 @@ class PowirbHandlerTest < Test::Unit::TestCase
 	end
   end
   
+  def test_wired_workitems_sources
+    assert_not_nil @h.workitems_paths
+	assert_kind_of Array, @h.workitems_paths
+  end
+  
   def test_workitems
-    assert_kind_of Array, @h.workitems
-	assert @h.workitems_count == 4
+    assert_kind_of Hash, @h.workitems
 	assert @h.workitems.size == 4
+	
+	assert_equal 1, @h.workitems(:type => 'task').size
+	assert_equal 3, @h.workitems(:type => 'action').size
+	assert_equal 0, @h.workitems(:type => 'fooz').size
+	
+	assert_not_nil @h.workitems['WI-1']
+	assert_nil @h.workitems['non existant wid']	
   end
   
 end
