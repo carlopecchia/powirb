@@ -12,4 +12,7 @@ class PowirbTest < Test::Unit::TestCase
 	assert_not_nil Powirb.log
   end
   
+  def test_valid_version
+    assert_not_nil Powirb::VERSION
+  end  
 end

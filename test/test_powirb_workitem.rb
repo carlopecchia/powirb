@@ -35,12 +35,18 @@ class PowirbWorkitemTest < Test::Unit::TestCase
     @wi['foo'] = 'bar'
 	assert @wi['foo'] == 'bar'
 	assert @wi[:foo] == 'bar'
+	
+	@wi['foo'] = {:value => 'new foo', :type => 'enum:fooz'}
+	assert @wi.to_xml.include?("id=\"foo\" type=\"enum:fooz\"")
   end
-  
+
   def test_updating_existing_field
     assert_not_nil @wi['title']
 	@wi['title'] = 'Some silly Title here...'
 	assert @wi['title'] == 'Some silly Title here...'
+	
+	@wi['title'] = {:value => 'new title', :type => 'text/plain'}
+	assert @wi.to_xml.include?("id=\"title\" type=\"text/plain\"")
   end
 
   def test_remove_field

@@ -7,6 +7,7 @@ end
 
 require 'powirb/workitem'
 require 'powirb/handler'
+require 'powirb/version'
 require 'logger'
 
 # This module represent a container for Powirb classes.

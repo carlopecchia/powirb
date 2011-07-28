@@ -21,6 +21,7 @@ class Handler
     @project_path = project_path
 	Powirb.log.debug("Initialized handler for #{@project_path}")
 	
+	# workitems are stored in a big hash, indexed by 'wid's
 	@space = {}
 	self.workitems_paths.each do |path|
       Dir[File.join(@project_path, path, "/**/workitem.xml")].each do |filename|
@@ -33,11 +34,11 @@ class Handler
   end
 
   # Return all workitems in the project
-  def workitems(conds=nil)
-    return @space  if conds.nil?
+  def workitems(conditions=nil)
+    return @space  if conditions.nil?
 	# Return only workitems for which *all* specified conditions are true
 	@space.select do |wid,wi|
-	  conds.map{|k,v| wi[k] == v}.reduce(:&)
+	  conditions.map{|k,v| wi[k] == v}.reduce(:&)
 	end
   end
   
