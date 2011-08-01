@@ -102,4 +102,19 @@ class PowirbWorkitemTest < Test::Unit::TestCase
 	assert_equal 1, wi.links.size
 	assert_equal 'parent:WI-1', wi.links.first
   end
+  
+  def test_add_link
+    wi1 = @h.workitems['WI-1']
+	assert_not_nil wi1
+	wi2 = @h.workitems['WI-2']
+	assert_not_nil wi2
+	
+    # to empty link set
+	wi1.add_link(:wid => 'WI-2', :role => 'relates_to')
+	assert wi1.links.include?('relates_to:WI-2')
+	
+	# to non empty links set
+	wi2.add_link(:wid => 'WI-1', :role => 'relates_to')
+	assert wi2.links.include?('relates_to:WI-1')
+  end
 end

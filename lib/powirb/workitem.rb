@@ -64,7 +64,7 @@ class Workitem
 	    e.content = fvalue
 	  end
 	end
-	# NOTE: this method need some refactoring... :(
+	# NOTE: this method need SOME refactoring!
   end
   
   # Return the list of linked workitems ['role1:wid1', ..., 'roleN:widN']
@@ -76,6 +76,24 @@ class Workitem
 	  tmp << "#{role}:#{linked_wid}"
 	end
 	return tmp
+  end
+  
+  def add_link(link_hash)
+    to_wid  = link_hash[:wid]
+	to_role = link_hash[:role]
+	
+    if @doc.xpath("//field[@id=\"linkedWorkItems\"]/list").last.nil?
+      # adding a linkedWorkItems section
+      nn_linkedWorkItems = Nokogiri::XML::Node.new('field', @doc)
+      nn_linkedWorkItems['id'] = 'linkedWorkItems'
+      nn_linkedWorkItems.add_child("<list></list>")
+      @doc.xpath("//work-item").last.add_child(nn_linkedWorkItems)
+    end
+    # create the new 'struct' link..
+    nl = Nokogiri::XML::Node.new('struct', @doc)
+    nl.add_child("<item id=\"revision\"/>\n<item id=\"workItem\">#{to_wid}</item>\n<item id=\"role\">#{to_role}</item>")
+    # ..add it to the set
+    @doc.xpath("//field[@id=\"linkedWorkItems\"]/list").last.add_child(nl)
   end
   
   # Save workitem on filesystem
