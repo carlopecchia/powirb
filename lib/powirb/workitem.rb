@@ -32,40 +32,50 @@ class Workitem
 	node.text
   end
   
-  # Set/remove a field
-  def []=(fname, fvalue)
-    # NOTE: only string/text field can be set/updated
-    fname = fname.to_s
-    if self[fname].nil?
-	  # inserting new field
-	  Powirb.log.debug("[#{wid}] adding new field '#{fname}' with value '#{fvalue}'")
-	  if fvalue.instance_of?(Hash)
-	    value = fvalue[:value]
-		type  = fvalue[:type]
-	    @doc.xpath('//field[@id="type"]').last.add_next_sibling("\n    <field id=\"#{fname}\" type=\"#{type}\">#{value}</field>")
-	  else
-	    @doc.xpath('//field[@id="type"]').last.add_next_sibling("\n    <field id=\"#{fname}\">#{fvalue}</field>")
-	  end
-	  # NOTE: we are sure that the 'type' field exists, so we add XML node after that one
-    else
-	  if fvalue.nil?
-	    # remove existing field
-		Powirb.log.debug("[#{wid}] removing field '#{fname}'")
-		@doc.xpath("//field[@id=\"#{fname}\"]").last.remove
-	  else
-	    # update existing field
-		Powirb.log.debug("[#{wid}] updating field '#{fname}' with value '#{fvalue}'")
-        e = @doc.xpath("//field[@id=\"#{fname}\"]").last
-        if fvalue.instance_of?(Hash)
-	      value = fvalue[:value]
-		  type  = fvalue[:type]
-		  e['type'] = type
-	    end		
-	    e.content = fvalue
-	  end
+  # Set/remove a field, optionally is possible to specify a 'type'
+  # eg: wi[:foo] = nil   -> remove the field 'foo'
+  #     wi[:foo] = 'bar' -> add/update the field 'foo'
+  #     wi[:foo] = {:value => 'bar', :type => 'enum:foo'} -> the same as above
+  def []=(f,v)
+    f = f.to_s
+
+	# with a null value we remove and existing field
+	if v.nil?
+	  # Delete
+      Powirb.log.debug("[#{wid}] removing field '#{f}'")
+      @doc.xpath("//field[@id=\"#{f}\"]").last.remove
+	  return
 	end
-	# NOTE: this method need SOME refactoring!
+	# assert: v is defined (String or Hash)
+	
+	# retrieve the 'value' and the optional 'type'
+	if v.instance_of?(Hash)
+	  value = v[:value]
+	  type  = v[:type]
+	else 
+	  value = v
+	  type  = nil
+	end
+	# assert: 'value' and 'type' are defined
+	
+	if self[f].nil?
+	  # Create: the field is not already present
+      Powirb.log.debug("[#{wid}] adding new field '#{f}' with value '#{value}'")
+	  e = Nokogiri::XML::Node.new('field', @doc)
+	  e['id'] = f
+	  e['type'] = type  unless type.nil?
+	  e.content = value
+	  # we are sure the 'type' field always exists for any workitem, so attach after that
+	  @doc.xpath('//field[@id="type"]').last.add_next_sibling(e)
+	else
+	  # Update: the field is already present
+	  Powirb.log.debug("[#{wid}] updating existing field '#{f}' with value '#{value}'")
+	  e = @doc.xpath("//field[@id=\"#{f}\"]").last
+	  e['type'] = type  unless type.nil?
+	  e.content = value	  
+	end	
   end
+  
   
   # Return the list of linked workitems ['role1:wid1', ..., 'roleN:widN']
   def links
@@ -78,22 +88,32 @@ class Workitem
 	return tmp
   end
   
-  def add_link(link_hash)
-    to_wid  = link_hash[:wid]
-	to_role = link_hash[:role]
+  # Add a link to another workitem with specified role
+  def add_link(lh)
+    lnk_wid  = lh[:wid]
+	lnk_role = lh[:role]
 	
-    if @doc.xpath("//field[@id=\"linkedWorkItems\"]/list").last.nil?
-      # adding a linkedWorkItems section
-      nn_linkedWorkItems = Nokogiri::XML::Node.new('field', @doc)
-      nn_linkedWorkItems['id'] = 'linkedWorkItems'
-      nn_linkedWorkItems.add_child("<list></list>")
-      @doc.xpath("//work-item").last.add_child(nn_linkedWorkItems)
+	# find or create the attach node
+    if @doc.xpath('//field[@id="linkedWorkItems"]/list').last.nil?
+      Nokogiri::XML::Builder.with(@doc.xpath('//work-item').last) do
+        field(:id => 'linkedWorkItems') {
+	      list {}
+	    }
+      end
     end
-    # create the new 'struct' link..
-    nl = Nokogiri::XML::Node.new('struct', @doc)
-    nl.add_child("<item id=\"revision\"/>\n<item id=\"workItem\">#{to_wid}</item>\n<item id=\"role\">#{to_role}</item>")
-    # ..add it to the set
-    @doc.xpath("//field[@id=\"linkedWorkItems\"]/list").last.add_child(nl)
+	
+	# build and attach the link struct
+	Nokogiri::XML::Builder.with(@doc.xpath('//field[@id="linkedWorkItems"]/list').last) do
+	  struct {
+	    item(:id => 'revision')
+		item(:id => 'workItem') {
+		  text lnk_wid
+		}
+		item(:id => 'role') {
+		  text lnk_role
+		}
+	  }
+	end
   end
   
   # Save workitem on filesystem
